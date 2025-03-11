@@ -169,8 +169,4 @@ li span {
     .task-checkbox {
         flex-shrink: 0;
     }
-
-    body {
-        height: 50vh;
-    }
 }
