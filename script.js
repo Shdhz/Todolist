@@ -1,16 +1,27 @@
-document.addEventListener('DOMContentLoaded', loadTasks);
+document.addEventListener('DOMContentLoaded', function () {
+    loadTasks();
+
+    document.getElementById('taskInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            addTask();
+        }
+    });
+});
+
 
 function saveTasks() {
     const tasks = [];
-    document.querySelectorAll('#taskList li span').forEach(task => {
-        tasks.push(task.textContent);
+    document.querySelectorAll('#taskList li').forEach(li => {
+        const taskText = li.querySelector('span').textContent;
+        const isChecked = li.querySelector('.task-checkbox').checked;
+        tasks.push({ text: taskText, checked: isChecked });
     });
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 function loadTasks() {
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    savedTasks.forEach(task => addTask(task, false));
+    savedTasks.forEach(task => addTask(task.text, false, task.checked));
 }
 
 function addTask(taskText = null, save = true, checked = false) {
