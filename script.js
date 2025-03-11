@@ -47,34 +47,41 @@ function addTask(taskText = null, save = true, checked = false) {
     editButton.textContent = '✏️';
     editButton.classList.add('edit');
     editButton.onclick = function () {
-        const form = document.createElement('form');
-        form.classList.add('edit-form');
+        if (editButton.textContent === '✏️') {
+            // Masuk ke mode edit
+            const editInput = document.createElement('input');
+            editInput.type = 'text';
+            editInput.value = span.textContent;
+            editInput.classList.add('edit-input');
 
-        const editInput = document.createElement('input');
-        editInput.type = 'text';
-        editInput.value = span.textContent;
+            li.replaceChild(editInput, span);
+            editButton.textContent = '✔️'; // Ubah ikon ke simpan
 
-        const saveButton = document.createElement('button');
-        saveButton.textContent = '✔️';
-        saveButton.classList.add('edit');
-        saveButton.type = 'submit';
+            editInput.focus(); // Fokus otomatis ke input
 
-        form.appendChild(editInput);
-        form.appendChild(saveButton);
+            editInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    saveEdit();
+                }
+            });
 
-        li.replaceChild(form, span);
-        editButton.style.display = 'none';
-
-        form.onsubmit = function (e) {
-            e.preventDefault();
-            if (editInput.value.trim() !== '') {
-                span.textContent = editInput.value.trim();
-                li.replaceChild(span, form);
-                editButton.style.display = 'inline-block';
-                saveTasks();
-            }
-        };
+        } else {
+            // Simpan perubahan
+            saveEdit();
+        }
     };
+
+    // Fungsi Simpan Edit
+    function saveEdit() {
+        const editInput = li.querySelector('.edit-input');
+        if (editInput && editInput.value.trim() !== '') {
+            span.textContent = editInput.value.trim();
+            li.replaceChild(span, editInput);
+            editButton.textContent = '✏️'; // Kembali ke mode edit
+            saveTasks();
+        }
+    }
+
 
     // ❌ Delete Button
     const deleteButton = document.createElement('button');
