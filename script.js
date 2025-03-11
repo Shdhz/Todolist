@@ -39,25 +39,26 @@ function addTask(taskText = null, save = true, checked = false) {
     span.textContent = task;
     if (checked) span.classList.add('completed');
 
-    const actionsDiv = document.createElement('div');
-    actionsDiv.classList.add('actions');
+    // 📝 Membungkus Edit & Delete ke dalam Form
+    const form = document.createElement('form');
+    form.classList.add('task-form');
 
     // ✏️ Edit Button
     const editButton = document.createElement('button');
     editButton.textContent = '✏️';
     editButton.classList.add('edit');
+    editButton.type = 'button';
     editButton.onclick = function () {
         if (editButton.textContent === '✏️') {
-            // Masuk ke mode edit
             const editInput = document.createElement('input');
             editInput.type = 'text';
             editInput.value = span.textContent;
             editInput.classList.add('edit-input');
 
             li.replaceChild(editInput, span);
-            editButton.textContent = '✔️'; // Ubah ikon ke simpan
+            editButton.textContent = '✔️';
 
-            editInput.focus(); // Fokus otomatis ke input
+            editInput.focus();
 
             editInput.addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
@@ -66,7 +67,6 @@ function addTask(taskText = null, save = true, checked = false) {
             });
 
         } else {
-            // Simpan perubahan
             saveEdit();
         }
     };
@@ -77,27 +77,31 @@ function addTask(taskText = null, save = true, checked = false) {
         if (editInput && editInput.value.trim() !== '') {
             span.textContent = editInput.value.trim();
             li.replaceChild(span, editInput);
-            editButton.textContent = '✏️'; // Kembali ke mode edit
+            editButton.textContent = '✏️';
             saveTasks();
         }
     }
-
 
     // ❌ Delete Button
     const deleteButton = document.createElement('button');
     deleteButton.textContent = '❌';
     deleteButton.classList.add('delete');
-    deleteButton.onclick = function () {
+    deleteButton.type = 'submit'; 
+
+    form.onsubmit = function (e) {
+        e.preventDefault();
         li.remove();
         saveTasks();
     };
 
-    actionsDiv.appendChild(editButton);
-    actionsDiv.appendChild(deleteButton);
+    form.appendChild(editButton);
+    form.appendChild(deleteButton);
+
     li.appendChild(checkbox);
     li.appendChild(span);
-    li.appendChild(actionsDiv);
+    li.appendChild(form); 
     taskList.appendChild(li);
+
     if (save) saveTasks();
     input.value = '';
 }

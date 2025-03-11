@@ -132,7 +132,7 @@ li span {
     background: var(--edit-btn-hover);
 }
 
-.edit-form {
+.task-form {
     display: flex;
     gap: 5px;
 }
@@ -143,24 +143,34 @@ li span {
 
 @media (max-width: 480px) {
     .actions {
+        display: flex;
         flex-direction: row;
         gap: 3px;
+        align-items: center;
     }
 
     .delete, .edit {
-        width: 30px; 
+        width: 32px; 
+        height: 32px;
         padding: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 14px;
+        border-radius: var(--border-radius);
+    }
+
+    .task-form {
+        display: grid;
+        gap: 5px;
+        align-items: center;
+    }    
+
+    .task-checkbox {
+        flex-shrink: 0;
     }
 
     body {
-        background: var(--bg-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
         height: 50vh;
     }
 }
